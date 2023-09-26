@@ -17,6 +17,14 @@ async function MainLayout({
     redirect('/login');
   }
 
+  const { 
+    data: publicUser,
+  } = await supabase.from("users").select("username").eq("id", user?.id).single();
+
+  if (publicUser?.username === null) {
+    redirect('/sign-up/initial-setup');
+  }
+
   return (
     <>{ children }</>
   )

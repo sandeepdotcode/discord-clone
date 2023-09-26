@@ -4,11 +4,11 @@ import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(request) {
+export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
-  const email = formData.get('email')
-  const password = formData.get('password')
+  const email = String(formData.get('email'))
+  const password = String(formData.get('password'))
   const supabase = createRouteHandlerClient({ cookies })
 
   await supabase.auth.signUp({
@@ -19,7 +19,7 @@ export async function POST(request) {
     },
   })
 
-  return NextResponse.redirect(requestUrl.origin, {
+  return NextResponse.redirect(`${requestUrl.origin}/sign-up/verify-banner`, {
     status: 301,
   })
 }
