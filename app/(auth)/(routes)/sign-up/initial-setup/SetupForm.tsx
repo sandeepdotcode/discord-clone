@@ -10,7 +10,7 @@ import { Form, FormControl, FormDescription,
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 const dotMsg = "Username cannot contain repeating dots";
 const charMsg = "Please only use numbers, letters, underscores _, or periods .";
@@ -35,6 +35,7 @@ const formSchema = z.object({
 function SetupForm({ session }: { session: Session | null}) {
 	const supabase = createClientComponentClient<Database>();
 	const user = session?.user;
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -55,7 +56,9 @@ function SetupForm({ session }: { session: Session | null}) {
 		}).eq("id", user?.id);
 
 		if (!error) {
-			redirect('/');
+			// redirect('/login'); Throwing error
+			// workaround below
+			router.push('/');
 		}
 	};
 
