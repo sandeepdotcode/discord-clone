@@ -1,0 +1,17 @@
+import { pgTable, serial, text, varchar, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
+
+export const statusEnum = pgEnum('status', ['OFFLINE', 'ONLINE']);
+ 
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  updatedAt: timestamp('updated_at'),
+  username: text('username').unique,
+  dispName: text('display_name'),
+  avatarUrl: text('avatar_url'),
+  status: statusEnum('status'),
+  showStatus: boolean('show_status'),
+});
+
+export const server = pgTable('server', {
+  id: serial('id'),
+  name: text('
