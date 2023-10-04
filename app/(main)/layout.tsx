@@ -10,16 +10,16 @@ async function MainLayout({
   const supabase = createServerComponentClient({ cookies });
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if(!user) {
+  if(!session) {
     redirect('/login');
   }
 
   const { 
     data: publicUser,
-  } = await supabase.from("users").select("username").eq("id", user?.id).single();
+  } = await supabase.from("users").select("username").eq("id", session.user.id).single();
 
   if (publicUser?.username === null) {
     redirect('/sign-up/initial-setup');
