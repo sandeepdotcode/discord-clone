@@ -1,6 +1,6 @@
 import { pgTable, unique, pgEnum, uuid, text, boolean, timestamp, index, foreignKey, primaryKey } from "drizzle-orm/pg-core"
 
-import { sql } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
 export const factorType = pgEnum("factor_type", ['totp', 'webauthn'])
@@ -28,6 +28,12 @@ export const users = pgTable("users", {
 	}
 });
 
+export const userRelations = relations(users, ({ many }) => ({
+	servers: many(servers),
+	channels: many(channels),
+	memberships: many(members),
+}));
+
 export const servers = pgTable("servers", {
 	id: uuid("id").default(sql`uuid_generate_v4()`).primaryKey().notNull(),
 	name: text("name").notNull(),
@@ -43,6 +49,15 @@ export const servers = pgTable("servers", {
 		serversInviteCodeKey: unique("servers_invite_code_key").on(table.inviteCode),
 	}
 });
+
+export const serverRelations = relations(servers, ({ one, many }) => ({
+	creator: one(users, {
+		fields: [servers.userId],
+		references: [users.id],
+	}),
+	channels: many(channels),
+	members: many(members),
+}));
 
 export const channels = pgTable("channels", {
 	id: uuid("id").default(sql`uuid_generate_v4()`).primaryKey().notNull(),
@@ -61,6 +76,17 @@ export const channels = pgTable("channels", {
 	}
 });
 
+export const channelRelations = relations(channels, ({ one }) => ({
+	server: one(servers, {
+		fields: [channels.serverId],
+		references: [servers.id],
+	}),
+	creator: one(users, {
+		fields: [channels.userId],
+		references: [users.id],
+	}),
+}));
+
 export const members = pgTable("members", {
 	role: memberRole("role").default('guest'),
 	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" } ),
@@ -75,3 +101,14 @@ export const members = pgTable("members", {
 		membersPkey: primaryKey(table.userId, table.serverId)
 	}
 });
+
+export const memberRelations = relations(members, ({ one }) => ({
+	user: one(users, {
+		fields: [members.userId],
+		references: [users.id],
+	}),
+	server: one(servers, {
+		fields: [members.serverId],
+		references: [servers.id],
+	}),
+}));
