@@ -1,22 +1,25 @@
 "use client"
 
-import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import * as z from 'zod';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
 	name: z.string({
 		required_error: "Server name is required",
 		invalid_type_error: "Server name should be a string",
 	}),
-	avatarUrl: z.string({
+	/* avatarUrl: z.string({
 		required_error: "Server avatar is required",
 		invalid_type_error: "Image upload failed",
-	}),
+	}), */
 });
 
 function CreateServerForm({ backFn }) {
@@ -24,15 +27,25 @@ function CreateServerForm({ backFn }) {
 		resolver: zodResolver(formSchema),
 		mode: "onBlur",
 		defaultValues: {
-			name: "",
-			avatarURL: "",
+			name: "Sandeep's Server",
+			// avatarURL: "https://avatars.githubusercontent.com/u/60999997?v=4",
 		},
 	});
 
 	const isLoading  = form.formState.isSubmitting;
 
+	const router = useRouter();
+
 	const submitHandler = async (values: z.infer<typeof formSchema>) => {
 		console.log(values);
+		try {
+			await axios.post("/api/servers", values);
+			form.reset()
+			router.refresh();
+			window.location.reload();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
