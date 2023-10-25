@@ -1,3 +1,4 @@
+import NavSidebar from "@/components/nav/NavSidebar";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -19,14 +20,21 @@ async function MainLayout({
 
   const { 
     data: publicUser,
-  } = await supabase.from("users").select("username").eq("id", session.user.id).single();
+  } = await supabase.from("users").select().eq("id", session.user.id).single();
 
   if (publicUser?.username === null) {
     redirect('/sign-up/initial-setup');
   }
 
   return (
-    <>{ children }</>
+    <div className="h-full">
+      <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
+        <NavSidebar userData={publicUser} />
+      </div>
+      <main className="md:pl-[72px] h-full">
+        { children }
+      </main>
+    </div>
   )
 }
 
