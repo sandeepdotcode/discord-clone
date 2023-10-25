@@ -15,7 +15,6 @@ export default async function Home() {
   } = await supabase.auth.getSession();
 
   const memberShip = await db.select().from(members).where(eq(members.userId, session?.user.id));
-  console.log(memberShip);
 
   return (
     <div className="flex flex-col items-start">

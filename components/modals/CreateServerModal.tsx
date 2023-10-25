@@ -2,18 +2,16 @@
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import CreateServerMenu from "./CreateServerMenu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import JoinServer from "./JoinServer";
 import CreateServerForm from "./CreateServerForm";
+import { useModal } from "@/hooks/useModalStore";
 
-function InitialModal() {
-	const [isMounted, setIsMounted] = useState(false);
+function CreateServerModal() {
+	const { isOpen, onClose, type } = useModal();
 	const [currentContent, setCurrentContent] = useState('menu');
-	const [isOpen, setIsOpen] = useState(true);
 
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
+	const isModalOpen = isOpen && type === "createServer";
 
 	const goBackToMenu = () => {
 		setCurrentContent('menu');
@@ -27,18 +25,14 @@ function InitialModal() {
 		setCurrentContent('join');
 	};
 
-	if (!isMounted) {
-		return null;
-	}
-
-	const closeModal = () => {
-		setIsOpen(false);
+	const handleClose = () => {
+		onClose();
 	};
 
 	return (
-		<Dialog open={isOpen} onOpenChange={closeModal}>
+		<Dialog open={isModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="bg-white dark:bg-white text-black p-0 overflow-hidden">
-				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={true} /> }
+				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={false} /> }
 				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} /> }
 				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} /> }
 			</DialogContent>
@@ -46,4 +40,4 @@ function InitialModal() {
 	);
 }
 
-export default InitialModal;
+export default CreateServerModal;

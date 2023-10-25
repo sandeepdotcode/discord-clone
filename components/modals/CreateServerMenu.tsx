@@ -2,11 +2,17 @@ import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/co
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 
-function CreateServerMenu({ createForm, joinForm }) {
+function CreateServerMenu({ createForm, joinForm, isFirst }) {
 	return (
 		<>
 			<DialogHeader className="pt-8 px-6">
-				<DialogTitle className="text-2xl text-center font-bold">Create your first Server!</DialogTitle>
+				<DialogTitle className="text-2xl text-center font-bold">
+					{
+						isFirst 
+						? "Create your first Server!"
+						: "Create a Server"
+					}
+				</DialogTitle>
 				<DialogDescription className="text-zinc-500 text-center">A server is where you and your friends hangout. Make yours and start talking.</DialogDescription>
 			</DialogHeader>
 			<div className="space-y-8 px-6">

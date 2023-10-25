@@ -1,4 +1,5 @@
 import NavSidebar from "@/components/nav/NavSidebar";
+import ModalProvider from "@/components/providers/ModalProvider";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -27,14 +28,15 @@ async function MainLayout({
   }
 
   return (
-    <div className="h-full">
-      <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
-        <NavSidebar userData={publicUser} />
+      <div className="h-full">
+        <ModalProvider />
+        <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
+          <NavSidebar userData={publicUser} />
+        </div>
+        <main className="md:pl-[72px] h-full">
+          { children }
+        </main>
       </div>
-      <main className="md:pl-[72px] h-full">
-        { children }
-      </main>
-    </div>
   )
 }
 
