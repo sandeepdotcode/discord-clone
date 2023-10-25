@@ -50,9 +50,7 @@ export async function POST(req: Request) {
 		})
 		.returning();
 
-
-		console.log(newServer);
-		return NextResponse.json(newServer);
+		return NextResponse.json(newChannels[0]);
 	} catch (error) {
 		console.error("[SERVERS_POST]", error);
 		return new NextResponse("Internal Error", { status: 500 });

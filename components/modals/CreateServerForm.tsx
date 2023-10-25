@@ -38,10 +38,11 @@ function CreateServerForm({ backFn }) {
 
 	const submitHandler = async (values: z.infer<typeof formSchema>) => {
 		try {
-			await axios.post("/api/servers", values);
+			const { data: welcomeChannel } = await axios.post("/api/servers", values);
 			form.reset()
-			router.refresh();
-			window.location.reload();
+			// router.refresh();
+			// window.location.reload();
+			router.push(`/channels/${welcomeChannel.serverId}/${welcomeChannel.id}`);
 		} catch (error) {
 			console.error(error);
 		}
