@@ -10,12 +10,15 @@ import { Form, FormControl, FormDescription,
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import ImageUpload from '@/components/custom/ImageUpload';
+import { useState } from 'react';
 
 const dotMsg = "Username cannot contain repeating dots";
 const charMsg = "Please only use numbers, letters, underscores _, or periods .";
 
 const formSchema = z.object({
+	avatarUrl: z.string(),
 	username: z.string({
 		required_error: "Username is required",
 		invalid_type_error: "Username should be a string",
@@ -37,10 +40,14 @@ function SetupForm({ session }: { session: Session | null}) {
 	const user = session?.user;
 	const router = useRouter();
 
+	const [fileUrl, setFileUrl] = useState("");
+	const [isUploading, setIsUploading] = useState(false);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		mode: "onBlur",
 		defaultValues: {
+			avatarUrl: "",
 			username: "",
 			dispName: "",
 			showStatus: true,
@@ -49,15 +56,14 @@ function SetupForm({ session }: { session: Session | null}) {
 
 	const submitHandler = async (values: z.infer<typeof formSchema>) => {
 		const { error } = await supabase.from("users").update({
+			avatar_url: fileUrl,
 			username: values.username,
 			display_name: values.dispName,
 			show_status: values.showStatus,
 			updated_at: new Date().toISOString(),
-		}).eq("id", user?.id);
+		}).eq("id", user?.id); 
 
 		if (!error) {
-			// redirect('/login'); Throwing error
-			// workaround below
 			router.push('/');
 		}
 	};
@@ -65,6 +71,19 @@ function SetupForm({ session }: { session: Session | null}) {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitHandler)} className="space-y-4">
+				<FormField
+					control={form.control}
+					name="avatarUrl"
+					render={({ field }) => (
+						<FormItem className='flex justify-center flex-col items-center'>
+							<FormControl className="w-full flex justify-center">
+								<ImageUpload field={field} avatarType="users" fileUrl={fileUrl} setFileUrl={setFileUrl}
+									setIsUploading={setIsUploading} inForm={true} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 				<FormField
 					control={form.control}
 					name="username"
@@ -106,7 +125,9 @@ function SetupForm({ session }: { session: Session | null}) {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" variant="primary" className="w-full">Submit</Button>
+				<Button type="submit" variant="primary" className="w-full" disabled={isUploading}>
+					{ isUploading ? "Uploading Avatar..." : "Submit" }
+				</Button>
 			</form>
 		</Form>
 	);
