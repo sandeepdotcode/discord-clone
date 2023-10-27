@@ -1,7 +1,7 @@
 "use client"
 
 import ActionTooltip from "@/components/nav/ActionTooltip";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import Image from "next/image";
 
 import { useParams, useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ function NavItem({
 				)}>
 					{ avatarUrl
 						? <Image fill src={avatarUrl} alt="Server" />
-						: "SS"
+						: <div className="w-full h-full flex justify-center items-center">{ getInitials(name) }</div>
 					}
 				</div>
 			</button>
