@@ -19,12 +19,13 @@ export default async function Home() {
   const userData = await db.query.users.findFirst({
     where: eq(users.id, user?.id),
   });
-  console.log(userData);
 
   const memberShip = await db
     .select()
     .from(members)
     .where(eq(members.userId, user?.id));
+
+  const username = (userData?.displayName ? userData.displayName : userData?.username) || "My";
 
   return (
     <div className="flex flex-col items-start h-full">
@@ -37,14 +38,14 @@ export default async function Home() {
           { userData?.avatarUrl
             ? <Image fill src={userData.avatarUrl} alt='' />
             : <div className="h-full w-full flex justify-center items-center dark:bg-zinc-600 text-3xl">
-                { getInitials(userData?.displayName ? userData.displayName : userData?.username) }
+                { getInitials(username) }
               </div>
           }
         </div>
         <div className='text-3xl font-bold dark:text-primary/80'>Hello, { userData?.displayName ? userData.displayName : userData?.username }</div>
         <div className="text-2xl font-bold dark:text-primary/80">Welcome to <span className="text-pink-600">Moocord</span>!</div>
       </div>
-      { !memberShip.length && <InitialModal /> }
+      { !memberShip.length && <InitialModal username={username} /> }
       <div className="flex justify-end w-full p-4 text-sm text-bold dark:text-primary/70">This is a protected route!</div>
     </div>
   )

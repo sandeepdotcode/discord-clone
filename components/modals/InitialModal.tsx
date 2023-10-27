@@ -6,7 +6,13 @@ import { useEffect, useState } from "react";
 import JoinServer from "./JoinServer";
 import CreateServerForm from "./CreateServerForm";
 
-function InitialModal() {
+interface InitialModalProps {
+	username: string;
+};
+
+function InitialModal({
+	username
+	}: InitialModalProps ) {
 	const [isMounted, setIsMounted] = useState(false);
 	const [currentContent, setCurrentContent] = useState('menu');
 	const [isOpen, setIsOpen] = useState(true);
@@ -39,7 +45,7 @@ function InitialModal() {
 		<Dialog open={isOpen} onOpenChange={closeModal}>
 			<DialogContent className="bg-white dark:bg-white text-black p-0 overflow-hidden">
 				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={true} /> }
-				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} /> }
+				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} username={username} /> }
 				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} /> }
 			</DialogContent>
 		</Dialog>

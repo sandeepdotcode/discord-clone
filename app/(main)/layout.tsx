@@ -27,9 +27,11 @@ async function MainLayout({
     redirect('/sign-up/initial-setup');
   }
 
+  const username = publicUser.display_name || publicUser.username || "My";
+
   return (
       <div className="h-full">
-        <ModalProvider />
+        <ModalProvider username={username} />
         <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
           <NavSidebar userData={publicUser} />
         </div>

@@ -22,12 +22,12 @@ const formSchema = z.object({
 	}), */
 });
 
-function CreateServerForm({ backFn }) {
+function CreateServerForm({ backFn, username }) {
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		mode: "onBlur",
 		defaultValues: {
-			name: "Sandeep's Server",
+			name: `${username}'s Server`,
 			// avatarURL: "https://avatars.githubusercontent.com/u/60999997?v=4",
 		},
 	});

@@ -7,7 +7,13 @@ import JoinServer from "./JoinServer";
 import CreateServerForm from "./CreateServerForm";
 import { useModal } from "@/hooks/useModalStore";
 
-function CreateServerModal() {
+interface CreateModalProps {
+	username: string;
+};
+
+function CreateServerModal({
+	username 
+}: CreateModalProps) {
 	const { isOpen, onClose, type } = useModal();
 	const [currentContent, setCurrentContent] = useState('menu');
 
@@ -33,7 +39,7 @@ function CreateServerModal() {
 		<Dialog open={isModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="bg-white dark:bg-white text-black p-0 overflow-hidden">
 				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={false} /> }
-				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} /> }
+				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} username={username} /> }
 				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} /> }
 			</DialogContent>
 		</Dialog>
