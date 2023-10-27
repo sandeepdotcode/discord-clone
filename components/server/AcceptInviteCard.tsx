@@ -49,17 +49,17 @@ function AcceptInviteCard({
 	};
 		
 	return (
-		<Card className="w-full h-full md:w-[500px] md:h-auto rounded-md flex flex-col items-center p-4 bg-[#313338]">
+		<Card className="w-full h-full md:w-[500px] md:h-auto rounded-md flex flex-col items-center p-4 bg-[#313338] border-none">
 			<div className="relative group flex mx-3 h-[56px] w-[56px]
 					transition-all overflow-hidden bg-primary/10 text-primary rounded-[16px] mt-2">
 				{ server.avatarUrl
 					? <Image fill src={server.avatarUrl} alt="Server" />
-					: <div className="h-full w-full flex justify-center items-center">{ getInitials(server.name) }</div>
+					: <div className="h-full w-full flex justify-center items-center bg-zinc-700/90 text-xl">{ getInitials(server.name) }</div>
 				}
 			</div>
 			<CardHeader>
-				<CardDescription>{ isAlreadyJoined ? "You are already a member of" : "You are invited to join" }</CardDescription>
-				<CardTitle>{ server.name }</CardTitle>
+				<CardDescription className="text-zinc-400">{ isAlreadyJoined ? "You are already a member of" : "You are invited to join" }</CardDescription>
+				<CardTitle className="text-white/90">{ server.name }</CardTitle>
 			</CardHeader>
 			<CardContent className="flex flex-col space-y-4 w-full">
 				{ isAlreadyJoined 
@@ -68,7 +68,7 @@ function AcceptInviteCard({
 							{ isLoading ? "Joining Server..." : "Accept Invite" }
 						</Button>
 				}
-				<Button variant="secondary" onClick={goToHome} disabled={isLoading}>Go To Home</Button>
+				<Button variant="default" className="bg-white/80 text-zinc-800 hover:bg-white/60" onClick={goToHome} disabled={isLoading}>Go To Home</Button>
 			</CardContent>
 		</Card>
 	);
