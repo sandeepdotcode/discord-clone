@@ -9,7 +9,7 @@ import { channels, members, servers } from "@/drizzle/schema";
 
 export async function POST(req: Request) {
 	try {
-		const { name } = await req.json();
+		const { name, avatarUrl } = await req.json();
 		const supabase = createRouteHandlerClient<Database>({ cookies });
 		const { data: { user } } = await supabase.auth.getUser();
 
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
 
 		const [ newServer ] = await db.insert(servers).values({
 			name,
+			avatarUrl,
 			userId: user.id,
 			inviteCode,
 		})

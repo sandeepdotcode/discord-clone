@@ -10,8 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
+import ImageUpload from '../custom/ImageUpload';
+import { useState } from 'react';
 
 const formSchema = z.object({
+	avatarUrl: z.string(),
 	name: z.string({
 		required_error: "Server name is required",
 		invalid_type_error: "Server name should be a string",
@@ -22,15 +25,19 @@ const formSchema = z.object({
 	}), */
 });
 
-function CreateServerForm({ backFn, username }) {
+function CreateServerForm({ backFn, username, closeModal }) {
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		mode: "onBlur",
 		defaultValues: {
+			avatarUrl: "",
 			name: `${username}'s Server`,
 			// avatarURL: "https://avatars.githubusercontent.com/u/60999997?v=4",
 		},
 	});
+
+	const [fileUrl, setFileUrl] = useState("");
+	const [isUploading, setIsUploading] = useState(false);
 
 	const isLoading  = form.formState.isSubmitting;
 
@@ -38,11 +45,17 @@ function CreateServerForm({ backFn, username }) {
 
 	const submitHandler = async (values: z.infer<typeof formSchema>) => {
 		try {
-			const { data: welcomeChannel } = await axios.post("/api/servers", values);
+			const actualValues = {
+				name: values.name,
+				avatarUrl: fileUrl,
+			}
+			
+			const { data: welcomeChannel } = await axios.post("/api/servers", actualValues);
 			form.reset()
-			// router.refresh();
+			router.refresh();
 			// window.location.reload();
-			router.push(`/channels/${welcomeChannel.serverId}/${welcomeChannel.id}`);
+			router.push(`/channels/${welcomeChannel.serverId}/${welcomeChannel.id}`); 
+			closeModal();
 		} catch (error) {
 			console.error(error);
 		}
@@ -57,9 +70,18 @@ function CreateServerForm({ backFn, username }) {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8" id="createServerForm">
 					<div className="space-y-8 px-6">
-						<div className="flex items-center justify-center text center">
-							TODO: image upload
-						</div>
+						<FormField
+							control={form.control}
+							name="avatarUrl"
+							render={({ field }) => (
+								<FormItem className="w-full flex justify-center mt-2">
+									<FormControl>
+										<ImageUpload field={field} fileUrl={fileUrl} setFileUrl={setFileUrl} avatarType="servers" inForm={true} setIsUploading={setIsUploading} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						<FormField
 							control={form.control}
@@ -82,7 +104,7 @@ function CreateServerForm({ backFn, username }) {
 			</Form>
 			<DialogFooter className="bg-gray-100 px-6 py-4">
 				<Button onClick={backFn} variant="secondary">Back</Button>
-				<Button form="createServerForm" disabled={isLoading} variant="primary">Create</Button>
+				<Button form="createServerForm" disabled={isLoading || isUploading} variant="primary">Create</Button>
 			</DialogFooter>
 		</>
 	);

@@ -39,7 +39,7 @@ function CreateServerModal({
 		<Dialog open={isModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="bg-white dark:bg-white text-black p-0 overflow-hidden">
 				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={false} /> }
-				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} username={username} /> }
+				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} username={username} closeModal={handleClose} /> }
 				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} /> }
 			</DialogContent>
 		</Dialog>
