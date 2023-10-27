@@ -70,11 +70,11 @@ function SetupForm({ session }: { session: Session | null}) {
 					name="username"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Username<span className="text-red-700">*</span></FormLabel>
+							<FormLabel className="uppercase text-xs font-bold text-zinc-400">Username<span className="text-red-700">*</span></FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<Input {...field} className="bg-[#1E1F22] text-white border-none" />
 							</FormControl>
-							<FormDescription>Please only use numbers, letters, underscores _, or periods .</FormDescription>
+							<FormDescription className="text-xs font-bold text-zinc-400">Please only use numbers, letters, underscores _, or periods .</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -84,11 +84,11 @@ function SetupForm({ session }: { session: Session | null}) {
 					name="dispName"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Display Name</FormLabel>
+							<FormLabel className="uppercase text-xs font-bold text-zinc-400">Display Name</FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<Input {...field} className="bg-[#1E1F22] text-white border-none" />
 							</FormControl>
-							<FormDescription>This is how others see you. You can use special characters.</FormDescription>
+							<FormDescription className="text-xs font-bold text-zinc-400">This is how others see you. You can use special characters.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -97,15 +97,16 @@ function SetupForm({ session }: { session: Session | null}) {
 					control={form.control}
 					name="showStatus"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Show online status</FormLabel>
+						<FormItem className="flex justify-between items-center">
+							<FormLabel className="uppercase text-xs font-bold text-zinc-400">Show online status</FormLabel>
 							<FormControl>
-								<Switch checked={field.value} onCheckedChange={field.onChange} />
+								<Switch checked={field.value} onCheckedChange={field.onChange}
+									className="dark:data-[state=checked]:bg-pink-400 dark:data-[state=unchecked]:bg-pink-200 data-[state=checked]:bg-pink-400 data-[state=unchecked]:bg-pink-200" />
 							</FormControl>
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Submit</Button>
+				<Button type="submit" variant="primary" className="w-full">Submit</Button>
 			</form>
 		</Form>
 	);

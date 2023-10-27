@@ -24,11 +24,11 @@ async function InitialSetup() {
 	}
 
 	return (
-		<Card>
-			<CardHeader>
+		<Card className="w-full h-full md:w-[500px] md:h-auto rounded-md flex flex-col items-center p-4 bg-[#313338] border-none">
+			<CardHeader className="w-full text-white/90 flex items-center">
 				<CardTitle>Set up your account</CardTitle>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="w-full">
 				<SetupForm session={session} />
 			</CardContent>
 		</Card>
