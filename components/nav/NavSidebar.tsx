@@ -17,8 +17,9 @@ async function NavSidebar({ userData }) {
 	}); */
 	
 	const joinedServers = await db.select({ servers })
-		.from(members)
-		.innerJoin(servers, eq(members.userId, userData.id));
+		.from(servers)
+		.innerJoin(members, eq(members.serverId, servers.id))
+		.where(eq(members.userId, userData.id));
 	
 	return (
 		<div className="space-y-4 flex flex-col items-center h-full text-primary w-full
