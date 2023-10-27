@@ -22,19 +22,19 @@ const data: DataItem[] = [
 
 function SignUp() {
   return (
-    <Card className="rounded-md">
+    <Card className="w-full h-full md:w-[500px] md:h-auto rounded-md flex flex-col items-center p-4 bg-[#313338] border-none">
       <CardHeader className="select-none">
-        <CardTitle>Create an account</CardTitle>
+        <CardTitle className="text-white/90">Create an account</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         <form action="/auth/sign-up" method="post" id="signUpForm">
           <div>
-            <Label htmlFor="emailSignUp" className="select-none">EMAIL<span className="text-red-700">*</span></Label>
-            <Input type="email" name="email" id="emailSignUp" required />
+            <Label htmlFor="emailSignUp" className="select-none uppercase text-xs text-zinc-400 font-bold">EMAIL<span className="text-red-700">*</span></Label>
+            <Input type="email" name="email" id="emailSignUp" className="bg-[#1E1F22] text-white border-none"  required />
           </div> 
           <div>
-            <Label htmlFor="passwordSignUp" className="select-none">PASSWORD<span className="text-red-700">*</span></Label>
-            <Input type="password" name="password" id="passwordSignUp" required />
+            <Label htmlFor="passwordSignUp" className="select-none uppercase text-xs text-zinc-400 font-bold">PASSWORD<span className="text-red-700">*</span></Label>
+            <Input type="password" name="password" id="passwordSignUp" className="bg-[#1E1F22] text-white border-none"  required />
           </div> 
 
           {/* data.map((item) => (
@@ -46,9 +46,9 @@ function SignUp() {
           )) */}
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col select-none">
-        <Button type="submit" form="signUpForm" className="bg-pink-400 rounded hover:bg-pink-500">Sign Up</Button>
-        <div><Link href="/login">Already have an account?</Link></div>
+      <CardFooter className="flex flex-col select-none w-full space-y-4 items-start">
+        <Button type="submit" form="signUpForm" className="bg-pink-500 rounded hover:bg-pink-600 w-full">Sign Up</Button>
+        <div className="text-pink-400 text-xs font-bold"><Link href="/login">Already have an account?</Link></div>
       </CardFooter>
     </Card>
   )
