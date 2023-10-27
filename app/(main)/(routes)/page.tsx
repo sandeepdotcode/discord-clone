@@ -10,11 +10,14 @@ import InitialModal from '@/components/modals/InitialModal';
 export default async function Home() {
   const supabase = createServerComponentClient({ cookies });
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { 
+    data: { user }
+  } = await supabase.auth.getUser();
 
-  const memberShip = await db.select().from(members).where(eq(members.userId, session?.user.id));
+  const memberShip = await db
+    .select()
+    .from(members)
+    .where(eq(members.userId, user?.id));
 
   return (
     <div className="flex flex-col items-start">
