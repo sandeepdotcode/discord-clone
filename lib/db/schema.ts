@@ -72,7 +72,7 @@ export const channels = pgTable("channels", {
 	return {
 		userIdIdx: index("channels_user_id_idx").on(table.userId),
 		serverIdIdx: index("channels_server_id_idx").on(table.serverId),
-		channelsNameKey: unique("channels_name_key").on(table.name),
+		channelsNameKey: unique("channels_name_key").on(table.name, table.serverId),
 	}
 });
 

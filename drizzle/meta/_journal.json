@@ -15,6 +15,13 @@
       "when": 1697951830856,
       "tag": "0001_rainy_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1698426985714,
+      "tag": "0002_thankful_mathemanic",
+      "breakpoints": true
     }
   ]
 }
