@@ -1,4 +1,5 @@
 import AcceptInviteCard from '@/components/server/AcceptInviteCard';
+import InvalidInviteCard from '@/components/server/InvalidInviteCard';
 import { db } from '@/lib/db/db';
 import { members, servers, users } from '@/lib/db/schema';
 import { getCurrentUserInActions } from '@/lib/getCurrentUser';
@@ -27,6 +28,10 @@ async function AcceptInvitePage({
 	const [ serverData ] = await db.selectDistinct()
 		.from(servers)
 		.where(eq(servers.inviteCode, params.inviteCode));
+
+	if (!serverData) {
+		return (<InvalidInviteCard />);
+	}
 
 	// checks if current user is already a member of the server
 	const [ serverMembership ] = await db.selectDistinct({ members })
