@@ -46,7 +46,7 @@ function InitialModal({
 			<DialogContent className="bg-white dark:bg-white text-black p-0 overflow-hidden">
 				{ currentContent === 'menu' && <CreateServerMenu createForm={goToForm} joinForm={goToJoin} isFirst={true} /> }
 				{ currentContent === 'form' && <CreateServerForm backFn={goBackToMenu} username={username} closeModal={closeModal} /> }
-				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} /> }
+				{ currentContent === 'join' && <JoinServer backFn={goBackToMenu} closeModal={closeModal} /> }
 			</DialogContent>
 		</Dialog>
 	);
