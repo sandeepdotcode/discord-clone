@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 const font = Open_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Discord',
+  title: 'Moocord',
   description: 'Discord clone created with Next',
 }
 
