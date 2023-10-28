@@ -1,8 +1,8 @@
 import AcceptInviteCard from '@/components/server/AcceptInviteCard';
 import { db } from '@/lib/db/db';
-import { members, servers } from '@/lib/db/schema';
+import { members, servers, users } from '@/lib/db/schema';
 import { getCurrentUserInActions } from '@/lib/getCurrentUser';
-import { eq, inArray } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 
 interface InviteCodePageProps {
@@ -24,17 +24,19 @@ async function AcceptInvitePage({
 		redirect('/');
 	}
 
-	const [ alreadyJoinedServer ] = await db.selectDistinct({ servers })
-		.from(members)
-		.innerJoin(servers, eq(members.serverId, servers.id))
-		.where(eq(servers.inviteCode, params.inviteCode));
-
 	const [ serverData ] = await db.selectDistinct()
 		.from(servers)
 		.where(eq(servers.inviteCode, params.inviteCode));
 
+	// checks if current user is already a member of the server
+	const [ serverMembership ] = await db.selectDistinct({ members })
+		.from(users)
+		.innerJoin(members, eq(members.userId, users.id))
+		.innerJoin(servers, eq(servers.id, members.serverId))
+		.where(and(eq(servers.inviteCode, params.inviteCode), eq(users.id, currentUserProfile.id)));
+
 	return (
-		<AcceptInviteCard isAlreadyJoined={alreadyJoinedServer !== undefined} server={serverData} />
+		<AcceptInviteCard isAlreadyJoined={serverMembership !== undefined} server={serverData} />
 	);
 }
 

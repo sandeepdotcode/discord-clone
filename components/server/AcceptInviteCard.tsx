@@ -25,17 +25,24 @@ function AcceptInviteCard({
 	server
 }: AcceptInviteProps) {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isJoining, setIsJoining] = useState(false);
 
 	const router = useRouter();
 
 	const acceptInvite = async () => {
 		try {
-			setIsLoading(true);
-			await axios.post(`/api/servers/[inviteCode]`);
-			router.push(`/channels/${server.id}/welcome`);
+			setIsJoining(true);
+			const res = await axios.post(`/api/invite/${server.inviteCode}`);
+			if (res.status === 200) {
+				router.push(`/channels/${server.id}/${res.data.channels[0].id}`);
+			}
+			else {
+				console.log(res.statusText);
+			}
 		} catch (error) {
 			console.error(error);
-		}
+			setIsJoining(false);
+		} 	
 	};
 
 	const openServer = () => {
@@ -64,11 +71,11 @@ function AcceptInviteCard({
 			<CardContent className="flex flex-col space-y-4 w-full">
 				{ isAlreadyJoined 
 					? <Button variant="primary" onClick={openServer} disabled={isLoading}>Open Server</Button>
-					: <Button variant="primary" onClick={acceptInvite} disabled={isLoading}>
-							{ isLoading ? "Joining Server..." : "Accept Invite" }
+					: <Button variant="primary" onClick={acceptInvite} disabled={isJoining || isLoading}>
+							{ isJoining ? "Joining Server..." : "Accept Invite" }
 						</Button>
 				}
-				<Button variant="default" className="bg-white/80 text-zinc-800 hover:bg-white/60" onClick={goToHome} disabled={isLoading}>Go To Home</Button>
+				<Button variant="default" className="bg-white/80 text-zinc-800 hover:bg-white/60" onClick={goToHome} disabled={isLoading || isJoining}>Go To Home</Button>
 			</CardContent>
 		</Card>
 	);
