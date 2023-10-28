@@ -30,8 +30,13 @@ export async function POST(
 			},
 		});
 		
+		if (!server) {
+			return NextResponse.json({ notFound: true, notFoundText: "Invalid Invite Code" });
+		}
+		
 		if (server?.members.length) {
 			// already a member of server
+			return NextResponse.json({ isMember: true });
 		}
 
 		// memberRole values = ["admin", "moderator", "guest"]
