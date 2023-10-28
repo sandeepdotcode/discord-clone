@@ -10,7 +10,7 @@ function Login() {
     <Card className="w-full h-full md:w-[500px] md:h-auto rounded-md flex flex-col items-center p-4 bg-[#313338] border-none">
       <CardHeader className="select-none flex flex-col space-y-3 items-center">
         <CardTitle className="text-white/90">Welcome back!</CardTitle>
-        <CardDescription className="text-zinc-400">We're so excited to see you again!</CardDescription>
+        <CardDescription className="text-zinc-400">We&#39;re so excited to see you again!</CardDescription>
       </CardHeader>
       <CardContent className="w-full">
         <form action="/auth/login" method="post" id="loginForm">
