@@ -18,6 +18,8 @@ const formSchema = z.object({
 	name: z.string({
 		required_error: "Server name is required",
 		invalid_type_error: "Server name should be a string",
+	}).min(1, {
+		message: "Server name is required",
 	}),
 	/* avatarUrl: z.string({
 		required_error: "Server avatar is required",
@@ -32,7 +34,6 @@ function CreateServerForm({ backFn, username, closeModal }) {
 		defaultValues: {
 			avatarUrl: "",
 			name: `${username}'s Server`,
-			// avatarURL: "https://avatars.githubusercontent.com/u/60999997?v=4",
 		},
 	});
 
@@ -88,7 +89,7 @@ function CreateServerForm({ backFn, username, closeModal }) {
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">Server Name</FormLabel>
+									<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">Server Name<span className="text-red-700 ml-1">*</span></FormLabel>
 									<FormControl>
 										<Input {...field} 
 											disabled={isLoading}
