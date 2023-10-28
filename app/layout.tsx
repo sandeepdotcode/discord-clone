@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils'
 
 const font = Open_Sans({ subsets: ['latin'] })
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: 'Moocord',
   description: 'Discord clone created with Next',
